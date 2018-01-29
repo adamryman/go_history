@@ -1,0 +1,18 @@
+language: go
+
+# use containers which run faster and have cache
+sudo: false
+
+cache:
+  directories:
+    $GOPATH/src
+
+go:
+  - 1.9.x
+  - tip
+
+script:
+  - go build -v github.com/adamryman/go_history/...
+
+notifications:
+  email: false
