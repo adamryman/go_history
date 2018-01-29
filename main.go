@@ -30,7 +30,7 @@ func main() {
 		line := fileData[i]
 		if dups[line] != 0 {
 			dups[line] = dups[line] + 1
-			fmt.Println(line)
+			//fmt.Println(line)
 			continue
 		}
 		dups[line] = 1
