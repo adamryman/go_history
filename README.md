@@ -13,5 +13,5 @@ go get github.com/adamryman/go_history
 # Usage
 
 ```
-go_history -f $HOME/.bash_history && mv .bash_history.go_history .bash_history
+$(go_history)
 ```
