@@ -8,11 +8,12 @@ cache:
     $GOPATH/src
 
 go:
-  - 1.9.x
+  - 1.11.x
   - tip
 
 script:
   - go build -v github.com/adamryman/go_history/...
+  - go test -v github.com/adamryman/go_history/...
 
 notifications:
   email: false
