@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -15,10 +16,14 @@ import (
 // Purpose: create a history file that maintains most recent command usage, but
 // delete duplicates
 func main() {
-	fileName := flag.StringP("file", "f", filepath.Join(os.Getenv("HOME"), ".bash_history"), "")
+	inputFile := flag.StringP("input", "i", filepath.Join(os.Getenv("HOME"), ".bash_history"), "file to remove leading duplicates from")
+	replaceFile := flag.BoolP("replace", "r", false, "input replace file with output")
+	outputFileName := flag.StringP("output", "o", "", "output file")
+	_ = replaceFile
 
 	flag.Parse()
-	file, err := os.Open(*fileName)
+
+	file, err := os.Open(*inputFile)
 	if err != nil {
 		panic(err)
 	}
@@ -35,19 +40,21 @@ func main() {
 
 	outData := dedup.Leading(fileData)
 
-	outFile, err := os.Create(*fileName + ".go_history")
-	if err != nil {
-		panic(err)
+	var out io.Writer
+	out = os.Stdout
+	if *outputFileName != "" {
+		out, err := os.Create(*outputFileName)
+		if err != nil {
+			panic(err)
+		}
+		defer out.Close()
 	}
 
 	// write this structure backwards to get the the correct ordering
 	for _, v := range outData {
-		_, err := fmt.Fprintf(outFile, "%s\n", v)
+		_, err := fmt.Fprintf(out, "%s\n", v)
 		if err != nil {
 			panic(err)
 		}
 	}
-	outFile.Close()
-	// print a move command to stdout
-	fmt.Fprintln(os.Stdout, "mv "+*fileName+".go_history"+" "+*fileName)
 }
