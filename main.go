@@ -50,11 +50,12 @@ func main() {
 	var out io.Writer
 	out = os.Stdout
 	if *outputFileName != "" {
-		out, err := os.Create(*outputFileName)
+		outFile, err := os.Create(*outputFileName)
 		if err != nil {
 			panic(err)
 		}
-		defer out.Close()
+		defer outFile.Close()
+		out = outFile
 	}
 
 	// write this structure backwards to get the the correct ordering
