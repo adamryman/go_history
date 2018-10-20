@@ -2,8 +2,6 @@
 
 Basically does a `cat $HOME/.bash_history | sort | uniq > .bash_history.go_history`, but preserves order. If you know what I mean.
 
-Fun little thing, might try to optimize for fun in the future.
-
 # Install
 
 ```
@@ -13,5 +11,17 @@ go get github.com/adamryman/go_history
 # Usage
 
 ```
-$(go_history)
+# To replace $HOME/.bash_history with all leading dupicates removed
+go_history -r
+```
+
+## .bashrc
+
+```
+# Avoid duplicates
+export HISTCONTROL=erasedups
+export PROMPT_COMMAND="history -a"
+if which go_history >/dev/null; then
+	export PROMPT_COMMAND="history -a;go_history -r"
+fi
 ```
