@@ -19,7 +19,6 @@ func main() {
 	inputFile := flag.StringP("input", "i", filepath.Join(os.Getenv("HOME"), ".bash_history"), "file to remove leading duplicates from")
 	replaceFile := flag.BoolP("replace", "r", false, "input replace file with output")
 	outputFileName := flag.StringP("output", "o", "", "output file")
-	_ = replaceFile
 
 	flag.Parse()
 
@@ -39,6 +38,14 @@ func main() {
 	file.Close()
 
 	outData := dedup.Leading(fileData)
+
+	if *replaceFile == true {
+		err = os.Remove(*inputFile)
+		if err != nil {
+			panic(err)
+		}
+		*outputFileName = *inputFile
+	}
 
 	var out io.Writer
 	out = os.Stdout
